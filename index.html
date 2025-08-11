@@ -11,33 +11,69 @@
       background: #f8f9fa;
       color: #333;
     }
+
     header {
       background: #5e17eb;
       color: white;
       padding: 60px 20px;
       text-align: center;
     }
+
     header h1 {
       margin: 0;
       font-size: 3em;
     }
+
     header p {
       font-size: 1.2em;
       margin-top: 10px;
     }
+
+    .button {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 12px 25px;
+      font-size: 1em;
+      color: white;
+      background: #f05454;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+
     section {
       padding: 40px 20px;
       max-width: 900px;
       margin: auto;
     }
+
     h2 {
       color: #5e17eb;
     }
+
+    ul {
+      padding-left: 20px;
+    }
+
+    .gallery {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .gallery img {
+      width: 100%;
+      max-width: 250px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
     .contact {
       background: #ececec;
       padding: 30px;
       text-align: center;
     }
+
     footer {
       background: #333;
       color: white;
@@ -45,9 +81,13 @@
       padding: 15px;
       font-size: 0.9em;
     }
+
     @media (max-width: 600px) {
       header h1 {
         font-size: 2em;
+      }
+      .gallery {
+        justify-content: center;
       }
     }
   </style>
@@ -57,6 +97,7 @@
   <header>
     <h1>Learn Telugu</h1>
     <p>Making Telugu fun for kids through courses and games!</p>
+    <a href="#" class="button">Buy Course</a>
   </header>
 
   <section>
@@ -71,6 +112,15 @@
       <li>🎮 Educational games designed to reinforce vocabulary & grammar</li>
       <li>🧒 Kid-friendly and parent-approved content</li>
     </ul>
+  </section>
+
+  <section>
+    <h2>Game Preview</h2>
+    <div class="gallery">
+      <img src="https://via.placeholder.com/250x150.png?text=Game+1" alt="Game 1 Preview" />
+      <img src="https://via.placeholder.com/250x150.png?text=Game+2" alt="Game 2 Preview" />
+      <img src="https://via.placeholder.com/250x150.png?text=Game+3" alt="Game 3 Preview" />
+    </div>
   </section>
 
   <section class="contact">
