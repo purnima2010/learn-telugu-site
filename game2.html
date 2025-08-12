@@ -2,48 +2,116 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Game 2 - Match Telugu to English</title>
+  <title>Game 2 - Telugu Word Quiz</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    #quiz-container {
+      max-width: 400px;
+      margin: auto;
+      text-align: center;
+    }
+    button {
+      margin: 10px 5px;
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+    #result {
+      font-size: 18px;
+      margin-top: 15px;
+      min-height: 24px;
+    }
+    #score {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
-  <h2>Game 2: Match Telugu Word to English</h2>
-
+  <h2>Game 2: Telugu Word Quiz</h2>
   <div id="quiz-container">
-    <p id="question">What does “కుక్క” mean?</p>
-    <button onclick="checkAnswer(this, 'Dog')">Dog</button>
-    <button onclick="checkAnswer(this, 'Cat')">Cat</button>
-    <button onclick="checkAnswer(this, 'Tree')">Tree</button>
-
+    <p id="question">Loading...</p>
+    <div id="options"></div>
     <p id="result"></p>
 
-    <audio id="quizAudio" src="audio/kukka.mp3"></audio>
-    <button onclick="document.getElementById('quizAudio').play()">🔊 Hear "కుక్క"</button>
+    <audio id="quizAudio"></audio>
+    <button id="playAudioBtn">🔊 Hear Word</button>
+
+    <div id="score"></div>
+    <button id="nextBtn" style="display:none;">Next Question</button>
   </div>
 
-  <script>
-    function checkAnswer(btn, selected) {
-      const correct = 'Dog';
-      const result = document.getElementById('result');
-      if (selected === correct) {
-        result.textContent = '✅ Correct!';
-      } else {
-        result.textContent = '❌ Try again!';
-      }
+<script>
+  const quizData = [
+    { word: "కుక్క", audio: "audio/kukka.mp3", correct: "Dog", options: ["Cat", "Dog", "Tree"] },
+    { word: "పిల్లి", audio: "audio/pilli.mp3", correct: "Cat", options: ["Dog", "Bird", "Cat"] },
+    { word: "చెట్టు", audio: "audio/chettu.mp3", correct: "Tree", options: ["Tree", "Flower", "River"] },
+    { word: "పాము", audio: "audio/pamu.mp3", correct: "Snake", options: ["Snake", "Frog", "Fish"] },
+    { word: "వెలుగు", audio: "audio/velugu.mp3", correct: "Light", options: ["Dark", "Light", "Cold"] }
+  ];
+
+  let currentQuestionIndex = 0;
+  let score = 0;
+
+  const questionEl = document.getElementById('question');
+  const optionsEl = document.getElementById('options');
+  const resultEl = document.getElementById('result');
+  const quizAudio = document.getElementById('quizAudio');
+  const playAudioBtn = document.getElementById('playAudioBtn');
+  const scoreEl = document.getElementById('score');
+  const nextBtn = document.getElementById('nextBtn');
+
+  function loadQuestion() {
+    const current = quizData[currentQuestionIndex];
+    questionEl.textContent = `What does "${current.word}" mean?`;
+    optionsEl.innerHTML = '';
+    resultEl.textContent = '';
+    nextBtn.style.display = 'none';
+
+    current.options.forEach(option => {
+      const btn = document.createElement('button');
+      btn.textContent = option;
+      btn.onclick = () => checkAnswer(option);
+      optionsEl.appendChild(btn);
+    });
+
+    quizAudio.src = current.audio;
+  }
+
+  function checkAnswer(selected) {
+    const current = quizData[currentQuestionIndex];
+    if (selected === current.correct) {
+      resultEl.textContent = '✅ Correct!';
+      score++;
+    } else {
+      resultEl.textContent = '❌ Wrong! Try again or Next.';
     }
-  </script>
+    updateScore();
+    nextBtn.style.display = 'inline-block';
+  }
+
+  function updateScore() {
+    scoreEl.textContent = `Score: ${score} / ${quizData.length}`;
+  }
+
+  nextBtn.onclick = () => {
+    currentQuestionIndex++;
+    if (currentQuestionIndex < quizData.length) {
+      loadQuestion();
+    } else {
+      questionEl.textContent = "🎉 Quiz Completed!";
+      optionsEl.innerHTML = '';
+      resultEl.textContent = '';
+      nextBtn.style.display = 'none';
+    }
+  };
+
+  playAudioBtn.onclick = () => {
+    quizAudio.play();
+  };
+
+  // Load first question on page load
+  loadQuestion();
+  updateScore();
+</script>
 </body>
 </html>
-
-  <button onclick="playWord('audio/pilli.mp3')">🐱 పిల్లి</button>
-  <button onclick="playWord('audio/kukka.mp3')">🐶 కుక్క</button>
-  <button onclick="playWord('audio/chettu.mp3')">🌳 చెట్టు</button>
-  <script>
-    function playWord(src) {
-      const audio = document.getElementById('matchAudio');
-      audio.src = src;
-      audio.play();
-    }
-  </script>
-</body>
-</html>
-
