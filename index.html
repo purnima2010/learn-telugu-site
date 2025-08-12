@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Learn Telugu</title>
   <style>
     body {
@@ -50,10 +50,6 @@
       color: #5e17eb;
     }
 
-    ul {
-      padding-left: 20px;
-    }
-
     .gallery {
       display: flex;
       flex-wrap: wrap;
@@ -66,6 +62,7 @@
       max-width: 250px;
       border-radius: 8px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      cursor: pointer;
     }
 
     .contact {
@@ -82,13 +79,56 @@
       font-size: 0.9em;
     }
 
-    @media (max-width: 600px) {
-      header h1 {
-        font-size: 2em;
-      }
-      .gallery {
-        justify-content: center;
-      }
+    /* Game Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 30px;
+      max-width: 400px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .modal-content h3 {
+      margin-top: 0;
+    }
+
+    .option {
+      background: #f0f0f0;
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .option.correct {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .option.wrong {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    .close-btn {
+      margin-top: 20px;
+      background: #5e17eb;
+      color: white;
+      padding: 8px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
     }
   </style>
 </head>
@@ -97,19 +137,19 @@
   <header>
     <h1>Learn Telugu</h1>
     <p>Making Telugu fun for kids through courses and games!</p>
-    <a href="https://forms.gle/PdwMXD9iqFZ5ftuN6" class="button">Buy Course</a>
+    <a href="https://forms.gle/PdwMXD9iqFZ5ftuN6" class="button" target="_blank">Buy Course</a>
   </header>
 
   <section>
     <h2>About Us</h2>
-    <p>At Learn Telugu, we believe language learning should be fun! That's why we create interactive courses and educational games that help children learn Telugu naturally through play.</p>
+    <p>We create interactive Telugu courses and games that help kids learn naturally through play.</p>
   </section>
 
   <section>
     <h2>What We Offer</h2>
     <ul>
       <li>📘 Easy-to-follow Telugu learning materials</li>
-      <li>🎮 Educational games designed to reinforce vocabulary & grammar</li>
+      <li>🎮 Educational games to reinforce vocabulary & grammar</li>
       <li>🧒 Kid-friendly and parent-approved content</li>
     </ul>
   </section>
@@ -117,11 +157,23 @@
   <section>
     <h2>Game Preview</h2>
     <div class="gallery">
-      <img src="https://via.placeholder.com/250x150.png?text=Game+1" alt="Game 1 Preview" />
-      <img src="https://via.placeholder.com/250x150.png?text=Game+2" alt="Game 2 Preview" />
-      <img src="https://via.placeholder.com/250x150.png?text=Game+3" alt="Game 3 Preview" />
+      <img src="https://via.placeholder.com/250x150.png?text=Game+1" alt="Game 1" onclick="openGame()" />
+      <img src="https://via.placeholder.com/250x150.png?text=Game+2" alt="Game 2" />
+      <img src="https://via.placeholder.com/250x150.png?text=Game+3" alt="Game 3" />
     </div>
   </section>
+
+  <!-- Game Modal -->
+  <div class="modal" id="gameModal">
+    <div class="modal-content">
+      <h3>What is the meaning of “పిల్లి”?</h3>
+      <div class="option" onclick="checkAnswer(this, true)">Cat</div>
+      <div class="option" onclick="checkAnswer(this, false)">Dog</div>
+      <div class="option" onclick="checkAnswer(this, false)">Tree</div>
+      <div class="option" onclick="checkAnswer(this, false)">Ball</div>
+      <button class="close-btn" onclick="closeGame()">Close</button>
+    </div>
+  </div>
 
   <section class="contact">
     <h2>Contact Us</h2>
@@ -131,6 +183,36 @@
   <footer>
     &copy; 2025 Learn Telugu. All rights reserved.
   </footer>
+
+  <script>
+    function openGame() {
+      document.getElementById("gameModal").style.display = "flex";
+    }
+
+    function closeGame() {
+      document.getElementById("gameModal").style.display = "none";
+      resetOptions();
+    }
+
+    function checkAnswer(el, isCorrect) {
+      if (isCorrect) {
+        el.classList.add("correct");
+      } else {
+        el.classList.add("wrong");
+      }
+
+      const options = document.querySelectorAll(".option");
+      options.forEach(option => option.style.pointerEvents = "none");
+    }
+
+    function resetOptions() {
+      const options = document.querySelectorAll(".option");
+      options.forEach(option => {
+        option.classList.remove("correct", "wrong");
+        option.style.pointerEvents = "auto";
+      });
+    }
+  </script>
 
 </body>
 </html>
