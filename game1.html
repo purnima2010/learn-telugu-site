@@ -2,21 +2,221 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Game 1 - Telugu Quiz</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Game 1 - Learn Telugu Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      text-align: center;
+      background-color: #f9f9ff;
+    }
+    #quiz-container {
+      background: white;
+      padding: 20px 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 12px rgba(0,0,0,0.1);
+    }
+    h2 {
+      color: #5e17eb;
+    }
+    .question {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 20px;
+      align-items: center;
+    }
+    button.option-btn {
+      background-color: #6a5acd;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 18px;
+      font-size: 18px;
+      cursor: pointer;
+      width: 60%;
+      transition: background-color 0.3s ease;
+    }
+    button.option-btn:hover {
+      background-color: #523ec4;
+    }
+    #result {
+      font-weight: bold;
+      font-size: 22px;
+      margin: 15px 0;
+      min-height: 28px;
+    }
+    #score {
+      font-size: 20px;
+      margin-top: 20px;
+      color: #333;
+    }
+    #controls {
+      margin-top: 15px;
+    }
+    #controls button {
+      background: #f05454;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 18px;
+      font-size: 16px;
+      cursor: pointer;
+      margin: 0 8px;
+      transition: background-color 0.3s ease;
+    }
+    #controls button:disabled {
+      background-color: #d99;
+      cursor: not-allowed;
+    }
+  </style>
 </head>
 <body>
-  <h2>Game 1: Telugu Word Quiz</h2>
-  <p>What is the meaning of “పిల్లి”?</p>
-  <button onclick="checkAnswer(this, true)">Cat</button>
-  <button onclick="checkAnswer(this, false)">Dog</button>
-  <p id="result"></p>
-  <audio id="pilliAudio" src="audio/pilli.mp3"></audio>
-  <button onclick="document.getElementById('pilliAudio').play()">🔊 Hear "పిల్లి"</button>
-  <script>
-    function checkAnswer(btn, correct) {
-      document.getElementById('result').textContent = correct ? '✅ Correct!' : '❌ Try again!';
+  <div id="quiz-container">
+    <h2>Game 1: Telugu Word Quiz</h2>
+    <div class="question" id="question">Question text</div>
+    <div class="options" id="options"></div>
+    <div id="result" aria-live="polite"></div>
+    <div id="controls">
+      <button id="nextBtn" onclick="nextQuestion()" disabled>Next ➡️</button>
+      <button id="restartBtn" onclick="restartQuiz()" style="display:none;">Restart 🔄</button>
+    </div>
+    <div id="score"></div>
+  </div>
+
+<script>
+  const quizData = [
+    {
+      question: "What is the Telugu word for 'Cat'?",
+      options: ["పిల్లి", "కుక్క", "పాము", "చెట్టు"],
+      answer: "పిల్లి"
+    },
+    {
+      question: "What is the Telugu word for 'Dog'?",
+      options: ["పాము", "కుక్క", "వెలుగు", "పిల్లి"],
+      answer: "కుక్క"
+    },
+    {
+      question: "What is the Telugu word for 'Tree'?",
+      options: ["చెట్టు", "వెలుగు", "కుక్క", "పాము"],
+      answer: "చెట్టు"
+    },
+    {
+      question: "What is the Telugu word for 'Snake'?",
+      options: ["పాము", "పిల్లి", "చెట్టు", "కుక్క"],
+      answer: "పాము"
+    },
+    {
+      question: "What is the Telugu word for 'Light'?",
+      options: ["పాము", "చెట్టు", "వెలుగు", "పిల్లి"],
+      answer: "వెలుగు"
+    },
+    {
+      question: "What is the Telugu word for 'Water'?",
+      options: ["నీరు", "వెలుగు", "కుక్క", "పాము"],
+      answer: "నీరు"
+    },
+    {
+      question: "What is the Telugu word for 'Bird'?",
+      options: ["పక్షి", "పిల్లి", "చెట్టు", "వెలుగు"],
+      answer: "పక్షి"
     }
-  </script>
+  ];
+
+  let currentIndex = 0;
+  let score = 0;
+  let answered = false;
+
+  const questionEl = document.getElementById('question');
+  const optionsEl = document.getElementById('options');
+  const resultEl = document.getElementById('result');
+  const nextBtn = document.getElementById('nextBtn');
+  const restartBtn = document.getElementById('restartBtn');
+  const scoreEl = document.getElementById('score');
+
+  function loadQuestion() {
+    answered = false;
+    resultEl.textContent = '';
+    nextBtn.disabled = true;
+
+    const current = quizData[currentIndex];
+    questionEl.textContent = current.question;
+
+    // Clear previous options
+    optionsEl.innerHTML = '';
+
+    // Shuffle options
+    const shuffledOptions = shuffleArray([...current.options]);
+
+    shuffledOptions.forEach(option => {
+      const btn = document.createElement('button');
+      btn.textContent = option;
+      btn.className = 'option-btn';
+      btn.onclick = () => selectOption(option);
+      optionsEl.appendChild(btn);
+    });
+
+    updateScore();
+  }
+
+  function selectOption(selected) {
+    if (answered) return;
+    answered = true;
+
+    const current = quizData[currentIndex];
+    if (selected === current.answer) {
+      resultEl.textContent = "✅ Correct!";
+      score++;
+    } else {
+      resultEl.textContent = `❌ Wrong! Correct answer: ${current.answer}`;
+    }
+
+    // Disable all option buttons
+    [...optionsEl.children].forEach(btn => btn.disabled = true);
+
+    nextBtn.disabled = false;
+
+    if (currentIndex === quizData.length -1) {
+      nextBtn.style.display = 'none';
+      restartBtn.style.display = 'inline-block';
+    }
+    updateScore();
+  }
+
+  function nextQuestion() {
+    if (currentIndex < quizData.length -1) {
+      currentIndex++;
+      loadQuestion();
+    }
+  }
+
+  function restartQuiz() {
+    currentIndex = 0;
+    score = 0;
+    restartBtn.style.display = 'none';
+    nextBtn.style.display = 'inline-block';
+    loadQuestion();
+  }
+
+  function shuffleArray(array) {
+    for(let i = array.length -1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i+1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
+
+  function updateScore() {
+    scoreEl.textContent = `Score: ${score} / ${quizData.length}`;
+  }
+
+  // Load the first question
+  loadQuestion();
+</script>
 </body>
 </html>
