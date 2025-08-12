@@ -2,17 +2,38 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Game 2 - Match Words</title>
+  <title>Game 2 - Match Telugu to English</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h2>Game 2: Match Telugu Words to English</h2>
-  <ul>
-    <li>పిల్లి = <strong>Cat</strong></li>
-    <li>కుక్క = <strong>Dog</strong></li>
-    <li>చెట్టు = <strong>Tree</strong></li>
-  </ul>
-  <audio id="matchAudio"></audio>
+  <h2>Game 2: Match Telugu Word to English</h2>
+
+  <div id="quiz-container">
+    <p id="question">What does “కుక్క” mean?</p>
+    <button onclick="checkAnswer(this, 'Dog')">Dog</button>
+    <button onclick="checkAnswer(this, 'Cat')">Cat</button>
+    <button onclick="checkAnswer(this, 'Tree')">Tree</button>
+
+    <p id="result"></p>
+
+    <audio id="quizAudio" src="audio/kukka.mp3"></audio>
+    <button onclick="document.getElementById('quizAudio').play()">🔊 Hear "కుక్క"</button>
+  </div>
+
+  <script>
+    function checkAnswer(btn, selected) {
+      const correct = 'Dog';
+      const result = document.getElementById('result');
+      if (selected === correct) {
+        result.textContent = '✅ Correct!';
+      } else {
+        result.textContent = '❌ Try again!';
+      }
+    }
+  </script>
+</body>
+</html>
+
   <button onclick="playWord('audio/pilli.mp3')">🐱 పిల్లి</button>
   <button onclick="playWord('audio/kukka.mp3')">🐶 కుక్క</button>
   <button onclick="playWord('audio/chettu.mp3')">🌳 చెట్టు</button>
@@ -25,3 +46,4 @@
   </script>
 </body>
 </html>
+
