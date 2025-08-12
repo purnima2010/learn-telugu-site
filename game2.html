@@ -1,12 +1,27 @@
 <!DOCTYPE html>
-<html><head><meta charset="UTF-8"><title>Game 2</title><link rel="stylesheet" href="style.css"></head>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Game 2 - Match Words</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
 <body>
-  <h2>Game 2: Match Telugu Words</h2>
+  <h2>Game 2: Match Telugu Words to English</h2>
   <ul>
     <li>పిల్లి = <strong>Cat</strong></li>
-    <li>చెట్టు = <strong>Tree</strong></li>
     <li>కుక్క = <strong>Dog</strong></li>
+    <li>చెట్టు = <strong>Tree</strong></li>
   </ul>
-  <audio id="matchAudio" src="audio/chettu.mp3"></audio>
-  <button onclick="document.getElementById('matchAudio').play()">🔊 Hear Word</button>
-</body></html>
+  <audio id="matchAudio"></audio>
+  <button onclick="playWord('audio/pilli.mp3')">🐱 పిల్లి</button>
+  <button onclick="playWord('audio/kukka.mp3')">🐶 కుక్క</button>
+  <button onclick="playWord('audio/chettu.mp3')">🌳 చెట్టు</button>
+  <script>
+    function playWord(src) {
+      const audio = document.getElementById('matchAudio');
+      audio.src = src;
+      audio.play();
+    }
+  </script>
+</body>
+</html>

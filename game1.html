@@ -1,20 +1,22 @@
 <!DOCTYPE html>
-<html><head><meta charset="UTF-8"><title>Game 1</title><link rel="stylesheet" href="style.css"></head>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Game 1 - Telugu Quiz</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
 <body>
   <h2>Game 1: Telugu Word Quiz</h2>
-<p>What is the meaning of “పిల్లి”?</p>
-
-<button onclick="checkAnswer(this, true)">Cat</button>
-<button onclick="checkAnswer(this, false)">Dog</button>
-<p id="result"></p>
-
-<audio id="pilliAudio" src="audio/pilli.mp3"></audio>
-<button onclick="document.getElementById('pilliAudio').play()">🔊 Hear Word</button>
-
-<script>
-  function checkAnswer(btn, correct) {
-    document.getElementById('result').textContent = correct ? '✅ Correct!' : '❌ Try again!';
-  }
-</script>
-</body></html>
-
+  <p>What is the meaning of “పిల్లి”?</p>
+  <button onclick="checkAnswer(this, true)">Cat</button>
+  <button onclick="checkAnswer(this, false)">Dog</button>
+  <p id="result"></p>
+  <audio id="pilliAudio" src="audio/pilli.mp3"></audio>
+  <button onclick="document.getElementById('pilliAudio').play()">🔊 Hear "పిల్లి"</button>
+  <script>
+    function checkAnswer(btn, correct) {
+      document.getElementById('result').textContent = correct ? '✅ Correct!' : '❌ Try again!';
+    }
+  </script>
+</body>
+</html>

@@ -1,18 +1,24 @@
 <!DOCTYPE html>
-<html><head><meta charset="UTF-8"><title>Game 3</title><link rel="stylesheet" href="style.css"></head>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Game 3 - Spell Telugu Word</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
 <body>
   <h2>Game 3: Spell Telugu Word</h2>
   <div>
     <button onclick="addLetter('పి')">పి</button>
-    <button onclick="addLetter('ల్ఁ')">ల్ఁ</button>
-    <button onclick="addLetter('లి')">లి</button>
+    <button onclick="addLetter('ల')">ల</button>
+    <button onclick="addLetter('్లి')">్లి</button>
   </div>
   <p>Word: <span id="wordOutput"></span></p>
-  <audio id="alphaAudio" src="audio/kukka.mp3"></audio>
-  <button onclick="document.getElementById('alphaAudio').play()">🔊 Hear Word</button>
+  <audio id="buildAudio" src="audio/pilli.mp3"></audio>
+  <button onclick="document.getElementById('buildAudio').play()">🔊 Hear Word</button>
   <script>
-    function addLetter(l) {
-      document.getElementById('wordOutput').textContent += l;
+    function addLetter(letter) {
+      document.getElementById('wordOutput').textContent += letter;
     }
   </script>
-</body></html>
+</body>
+</html>
