@@ -4,76 +4,98 @@
   <meta charset="UTF-8" />
   <title>Game 3 - Spell Telugu Words</title>
   <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 20px auto;
+      text-align: center;
+    }
     #letters, #answer {
       display: flex;
       justify-content: center;
-      margin: 20px;
+      margin: 20px auto;
       gap: 10px;
       flex-wrap: wrap;
+      min-height: 50px;
+      border-radius: 8px;
+    }
+    #letters {
+      border: 2px solid #6a5acd;
+      padding: 10px;
+      background: #e6e6fa;
+      min-width: 300px;
+    }
+    #answer {
+      border: 2px dashed #999;
+      background: #fafafa;
+      min-width: 300px;
+      cursor: default;
     }
     .letter {
-      padding: 15px 20px;
+      padding: 12px 18px;
       background-color: #5e17eb;
       color: white;
-      font-size: 24px;
+      font-size: 28px;
       border-radius: 8px;
       cursor: grab;
       user-select: none;
+      user-drag: element;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+      transition: background-color 0.3s ease;
     }
-    #answer {
-      min-height: 50px;
-      border: 2px dashed #ccc;
-      padding: 10px;
-      background: #f0f0f0;
-      border-radius: 8px;
-      min-width: 250px;
-      flex-wrap: wrap;
+    .letter:active {
+      cursor: grabbing;
+      background-color: #3b0d9b;
     }
     #result {
-      text-align: center;
-      font-size: 18px;
+      font-weight: bold;
+      font-size: 22px;
       margin-top: 20px;
-      min-height: 24px;
+      min-height: 28px;
     }
-    button {
-      margin: 10px 5px;
-      padding: 10px 15px;
+    #controls button {
+      margin: 12px 8px;
+      padding: 10px 18px;
       font-size: 16px;
       background: #f05454;
       color: white;
       border: none;
-      border-radius: 5px;
+      border-radius: 6px;
       cursor: pointer;
+      transition: background-color 0.3s ease;
     }
-    #controls {
-      text-align: center;
-      margin-top: 20px;
+    #controls button:disabled {
+      background-color: #d99;
+      cursor: not-allowed;
+    }
+    #score {
+      font-weight: bold;
+      font-size: 20px;
+      margin-top: 15px;
     }
   </style>
 </head>
 <body>
   <h2>Game 3: Spell the Telugu Word</h2>
 
-  <div id="quiz-container">
-    <p id="wordPrompt" style="text-align:center; font-size:20px; font-weight:bold;"></p>
+  <p id="wordPrompt" style="font-size: 22px; font-weight: bold;"></p>
 
-    <div id="letters"></div>
-    <div id="answer" ondragover="allowDrop(event)" ondrop="drop(event)"></div>
+  <div id="letters" aria-label="Letter pieces, drag these to form the word"></div>
+  <div id="answer" aria-label="Drop letters here to spell the word" ondragover="allowDrop(event)" ondrop="drop(event)"></div>
 
-    <div id="controls">
-      <button id="checkBtn" onclick="checkSpelling()">Check Spelling</button>
-      <button onclick="resetGame()">Reset</button>
-      <button onclick="prevWord()">⬅️ Previous</button>
-      <button onclick="nextWord()">Next ➡️</button>
-    </div>
-
-    <p id="result"></p>
-
-    <audio id="wordAudio"></audio>
-    <button onclick="playAudio()">🔊 Hear Word</button>
-
-    <p id="score" style="font-weight:bold; text-align:center; margin-top:15px;"></p>
+  <div id="controls">
+    <button id="checkBtn" onclick="checkSpelling()">Check Spelling</button>
+    <button onclick="resetGame()">Reset</button>
+    <button onclick="prevWord()">⬅️ Previous</button>
+    <button onclick="nextWord()">Next ➡️</button>
   </div>
+
+  <p id="result" aria-live="polite"></p>
+
+  <audio id="wordAudio" preload="auto"></audio>
+  <button onclick="playAudio()">🔊 Hear Word</button>
+
+  <p id="score"></p>
 
 <script>
   const words = [
@@ -165,7 +187,10 @@
   function drop(e) {
     e.preventDefault();
     if(dragged) {
+      // Prevent dropping on letter div itself
       if(e.target.classList.contains('letter')) return;
+
+      // Append dragged letter to answer or back to letters
       if(e.target.id === 'answer' || e.target.id === 'letters') {
         e.target.appendChild(dragged);
       } else {
@@ -176,13 +201,14 @@
   }
 
   function checkSpelling() {
-    if (answeredCorrectly) return; // prevent multiple scoring
+    if (answeredCorrectly) return; // prevent multiple scoring for same word
 
     let spelledWord = '';
     answerDiv.childNodes.forEach(node => {
       spelledWord += node.textContent.trim();
     });
 
+    // Normalize to NFC Unicode form for accurate Telugu matching
     const normalizeText = (text) => text.normalize('NFC').trim();
     const userAnswer = normalizeText(spelledWord);
     const correctAnswer = normalizeText(words[currentIndex].word);
@@ -199,6 +225,7 @@
   }
 
   function resetGame() {
+    // Move all letters back to lettersDiv
     while(answerDiv.firstChild) {
       lettersDiv.appendChild(answerDiv.firstChild);
     }
@@ -231,9 +258,9 @@
     wordAudio.play();
   }
 
-  // Initialize game on load
+  // Initialize game on page load
   loadWord();
-
 </script>
+
 </body>
 </html>
