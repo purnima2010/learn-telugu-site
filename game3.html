@@ -176,20 +176,31 @@
   }
 
   function checkSpelling() {
-    let spelledWord = '';
-    answerDiv.childNodes.forEach(node => {
-      spelledWord += node.textContent;
-    });
-    const correctWord = words[currentIndex].word;
+  if (answeredCorrectly) return; // prevent multiple scoring for same word
 
-    if(spelledWord === correctWord) {
-      resultEl.textContent = '✅ Correct!';
-      score++;
-      updateScore();
-    } else {
-      resultEl.textContent = '❌ Incorrect, try again!';
-    }
+  let spelledWord = '';
+  answerDiv.childNodes.forEach(node => {
+    spelledWord += node.textContent.trim();
+  });
+
+  const normalizeText = (text) => text.normalize('NFC').trim();
+  const userAnswer = normalizeText(spelledWord);
+  const correctAnswer = normalizeText(words[currentIndex].word);
+
+  console.log('User spelled:', userAnswer);
+  console.log('Correct word:', correctAnswer);
+
+  if (userAnswer === correctAnswer) {
+    resultEl.textContent = '✅ Correct!';
+    score++;
+    updateScore();
+    answeredCorrectly = true;
+    document.querySelector('button[onclick="checkSpelling()"]').disabled = true;
+  } else {
+    resultEl.textContent = '❌ Incorrect, try again!';
   }
+}
+
 
   function resetGame() {
     // Move all letters back to lettersDiv
@@ -229,3 +240,4 @@
 </script>
 </body>
 </html>
+
