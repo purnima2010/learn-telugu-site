@@ -1,0 +1,6 @@
+
+body { font-family: Arial; margin: 0; background: #f8f9fa; }
+header { background: #5e17eb; color: white; padding: 40px; text-align: center; }
+.button { background: #f05454; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; }
+.gallery { display: flex; justify-content: center; gap: 20px; margin: 30px; }
+.gallery img { width: 200px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
