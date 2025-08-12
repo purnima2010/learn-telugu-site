@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8" />
   <title>Game 3 - Spell Telugu Words</title>
-  <link rel="stylesheet" href="style.css" />
   <style>
     #letters, #answer {
       display: flex;
@@ -62,7 +61,7 @@
     <div id="answer" ondragover="allowDrop(event)" ondrop="drop(event)"></div>
 
     <div id="controls">
-      <button onclick="checkSpelling()">Check Spelling</button>
+      <button id="checkBtn" onclick="checkSpelling()">Check Spelling</button>
       <button onclick="resetGame()">Reset</button>
       <button onclick="prevWord()">⬅️ Previous</button>
       <button onclick="nextWord()">Next ➡️</button>
@@ -107,6 +106,7 @@
 
   let currentIndex = 0;
   let score = 0;
+  let answeredCorrectly = false;
 
   const wordPrompt = document.getElementById('wordPrompt');
   const lettersDiv = document.getElementById('letters');
@@ -114,6 +114,7 @@
   const resultEl = document.getElementById('result');
   const wordAudio = document.getElementById('wordAudio');
   const scoreEl = document.getElementById('score');
+  const checkBtn = document.getElementById('checkBtn');
 
   function loadWord() {
     const current = words[currentIndex];
@@ -124,6 +125,8 @@
     lettersDiv.innerHTML = '';
     answerDiv.innerHTML = '';
     resultEl.textContent = '';
+    answeredCorrectly = false;
+    checkBtn.disabled = false;
 
     // Shuffle letters so user can't guess order
     const shuffledLetters = shuffleArray([...current.letters]);
@@ -162,10 +165,7 @@
   function drop(e) {
     e.preventDefault();
     if(dragged) {
-      // Prevent dropping on a letter
       if(e.target.classList.contains('letter')) return;
-
-      // Append dragged letter to answer or back to letters
       if(e.target.id === 'answer' || e.target.id === 'letters') {
         e.target.appendChild(dragged);
       } else {
@@ -176,38 +176,35 @@
   }
 
   function checkSpelling() {
-  if (answeredCorrectly) return; // prevent multiple scoring for same word
+    if (answeredCorrectly) return; // prevent multiple scoring
 
-  let spelledWord = '';
-  answerDiv.childNodes.forEach(node => {
-    spelledWord += node.textContent.trim();
-  });
+    let spelledWord = '';
+    answerDiv.childNodes.forEach(node => {
+      spelledWord += node.textContent.trim();
+    });
 
-  const normalizeText = (text) => text.normalize('NFC').trim();
-  const userAnswer = normalizeText(spelledWord);
-  const correctAnswer = normalizeText(words[currentIndex].word);
+    const normalizeText = (text) => text.normalize('NFC').trim();
+    const userAnswer = normalizeText(spelledWord);
+    const correctAnswer = normalizeText(words[currentIndex].word);
 
-  console.log('User spelled:', userAnswer);
-  console.log('Correct word:', correctAnswer);
-
-  if (userAnswer === correctAnswer) {
-    resultEl.textContent = '✅ Correct!';
-    score++;
-    updateScore();
-    answeredCorrectly = true;
-    document.querySelector('button[onclick="checkSpelling()"]').disabled = true;
-  } else {
-    resultEl.textContent = '❌ Incorrect, try again!';
+    if (userAnswer === correctAnswer) {
+      resultEl.textContent = '✅ Correct!';
+      score++;
+      updateScore();
+      answeredCorrectly = true;
+      checkBtn.disabled = true;
+    } else {
+      resultEl.textContent = '❌ Incorrect, try again!';
+    }
   }
-}
-
 
   function resetGame() {
-    // Move all letters back to lettersDiv
     while(answerDiv.firstChild) {
       lettersDiv.appendChild(answerDiv.firstChild);
     }
     resultEl.textContent = '';
+    answeredCorrectly = false;
+    checkBtn.disabled = false;
   }
 
   function nextWord() {
@@ -240,4 +237,3 @@
 </script>
 </body>
 </html>
-
